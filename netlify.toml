@@ -3,7 +3,7 @@
   publish = ".next"          # Directory to publish; for static export, use "out"
 
 [build.environment]
-  NODE_VERSION = "16"        # Specify the Node.js version to use
+  NODE_VERSION = "20.0.0"        # Specify the Node.js version to use
  
 [[plugins]]
   package = "@netlify/plugin-nextjs"  # Ensure this plugin is used for Next.js
