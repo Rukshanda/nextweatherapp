@@ -4,7 +4,7 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import Bottleneck from "bottleneck"; // Import Bottleneck
+import Bottleneck from "bottleneck";
 
 interface WeatherData {
   city_name: string;
@@ -80,14 +80,16 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  
   const limiter = new Bottleneck({
-    maxConcurrent: 1,   
-    minTime: 1000,     
+    maxConcurrent: 1,
+    minTime: 1000,
   });
 
-   
-  const fetchWeather = async (city: string = "Karachi", lat?: number, lon?: number) => {
+  const fetchWeather = async (
+    city: string = "Karachi",
+    lat?: number,
+    lon?: number
+  ) => {
     const apiKey = process.env.NEXT_PUBLIC_WEATHERBIT_API_KEY;
     setError(null);
     const today = new Date();
@@ -105,13 +107,24 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
     const lonlatforecastHourUrl = `https://api.weatherbit.io/v2.0/forecast/hourly?lat=${lat}&lon=${lon}&start_date=${startDate}&end_date=${endDate}&key=${apiKey}`;
 
     try {
-      const [currentResponse, forecastResponse, forecastHourResponse] = await Promise.all([
-        limiter.schedule(() => fetch(lat && lon ? lonlatcurrentWeatherUrl : currentWeatherUrl)),
-        limiter.schedule(() => fetch(lat && lon ? lonlatforecastUrl : forecastUrl)),
-        limiter.schedule(() => fetch(lat && lon ? lonlatforecastHourUrl : forecastHourUrl)),
-      ]);
+      const [currentResponse, forecastResponse, forecastHourResponse] =
+        await Promise.all([
+          limiter.schedule(() =>
+            fetch(lat && lon ? lonlatcurrentWeatherUrl : currentWeatherUrl)
+          ),
+          limiter.schedule(() =>
+            fetch(lat && lon ? lonlatforecastUrl : forecastUrl)
+          ),
+          limiter.schedule(() =>
+            fetch(lat && lon ? lonlatforecastHourUrl : forecastHourUrl)
+          ),
+        ]);
 
-      if (!currentResponse.ok || !forecastResponse.ok || !forecastHourResponse.ok) {
+      if (
+        !currentResponse.ok ||
+        !forecastResponse.ok ||
+        !forecastHourResponse.ok
+      ) {
         throw new Error("Failed to fetch weather data");
       }
 
@@ -136,17 +149,19 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
         wind_spd: day.wind_spd,
       }));
 
-      const hourforecast = forecastHourData.data.map((hour: ApiForecastHour) => {
-        const formattedTime = extractTime(hour.datetime);
-        return {
-          date: hour.valid_date,
-          temp: hour.temp,
-          description: hour.weather.description,
-          code: hour.weather.code,
-          wind_spd: hour.wind_spd,
-          time: formattedTime,
-        };
-      });
+      const hourforecast = forecastHourData.data.map(
+        (hour: ApiForecastHour) => {
+          const formattedTime = extractTime(hour.datetime);
+          return {
+            date: hour.valid_date,
+            temp: hour.temp,
+            description: hour.weather.description,
+            code: hour.weather.code,
+            wind_spd: hour.wind_spd,
+            time: formattedTime,
+          };
+        }
+      );
 
       setWeather({
         city_name: currentData.data[0]?.city_name,
@@ -168,12 +183,12 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
         forecast,
         hourforecast,
       });
-
     } catch (error) {
       setError("Error fetching weather data. Please try again.");
       console.error(error);
     }
-    console.log(error)
+
+    console.log(error);
   };
 
   const convertToLocalTime = (
@@ -225,7 +240,7 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
       return "Invalid time";
     }
 
-    const [hour] = datetime.split(":");
+    const [date, hour] = datetime.split(":");
     if (!hour) {
       return "Invalid time";
     }
@@ -236,6 +251,7 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
       minute: "2-digit",
       hour12: true,
     });
+    console.log(date);
   };
 
   return (
@@ -244,6 +260,8 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
     </WeatherContext.Provider>
   );
 };
+
+
 
 export const useWeather = (): WeatherContextType => {
   const context = useContext(WeatherContext);

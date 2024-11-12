@@ -1,14 +1,10 @@
 import { useWeather } from "@/contexts/WeatherContext";
 import React, { FC } from "react";
  
-import Msg from "./Msg";
-
 const CountryDetails: FC = () => {
-  const { weather } = useWeather();
-  if (!weather) {
-    return <Msg/>;
-  }
+   const { weather } = useWeather();
 
+  
   return (
     <div className="bg-gray-500 sm:rounded-[30px] res-rounded-top text-white shadow-customx-dark w-[100%] lg:w-[30%] py-[60px] px-[20px] text-center flex flex-col justify-center xl:justify-between">
       <p className="text-[2rem] lg:text-[2rem] xl:text-[2.2rem] font-bold">

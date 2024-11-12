@@ -1,14 +1,10 @@
 import { useWeather } from "@/contexts/WeatherContext";
 import React from "react";
- import Msg from "./Msg";
-
+ 
 function WeatherDetails() {
   const { weather } = useWeather();
 
-  if (!weather) {
-    return <Msg/> ;
-  }
-
+ 
   return (
     <div className="grid grid-cols-1 xl:flex gap-[25px] sm:gap-[15px] w-[100%] lg:w-[60%] bg-gray-500 sm:rounded-[30px] res-rounded-bottom text-white shadow-customx-dark px-[15px] md:px-[30px] py-[25px] sm:py-[15px] items-center">
       {/* -------------------------------------- */}
@@ -18,7 +14,7 @@ function WeatherDetails() {
             {weather?.temp}°C
           </p>
           <p className="text-[1rem] md:text-[1.2rem]">
-            Feels Like: 
+            Feels Like:
             <span className="text-[1rem] md:text-[1.2rem] lg:text-[1.5rem] font-bold">
               {weather?.app_temp}°C
             </span>
@@ -52,7 +48,11 @@ function WeatherDetails() {
       {/* -------------------------------------- */}
 
       <div className="flex flex-col sm:flex-row xl:flex-col w-[100%] xl:w-[18rem] items-center xl:justify-center">
-        <img src={`./weathericons/${weather?.code}@3x.png`} alt="" className="w-[180px] md:w-[250px]" />
+        <img
+          src={`./weathericons/${weather?.code}@3x.png`}
+          alt=""
+          className="w-[180px] md:w-[250px]"
+        />
         <span className="text-[2rem] lg:text-[2.2rem] font-bold">
           {weather?.description}
         </span>
@@ -61,7 +61,6 @@ function WeatherDetails() {
       {/* -------------------------------------- */}
 
       <div className="flex flex-wrap xsm:flex-nowrap xl:flex-wrap w-[100%] xl:w-[18rem] items-center gap-[30px] xsm:gap-[0px] xl:gap-[30px] ">
-     
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col gap-[2px] items-center w-1/2">
             <img src="./humidity-dark.png" alt="Humidity icon" />

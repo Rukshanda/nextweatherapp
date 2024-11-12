@@ -1,31 +1,50 @@
 'use client'
 
+import { useState, useEffect } from 'react';
 import Navbar from "./components/Navbar";
 import { LocationProvider } from "@/contexts/LocationContext";
-import CountryDetails from "./components/CountryDetails";
-import WeatherDetails from "./components/WeatherDetails";
-import DailyForecast from "./components/DailyForecast";
+
 import { WeatherProvider } from "@/contexts/WeatherContext";
-import HourlyForecast from "./components/HourlyForecast";
+
+import Loader from './components/Loader';
+import Body from './components/Body';
 
 export default function Home() {
+  const [loading, setLoading] = useState(true); 
+
+  useEffect(() => {
+    console.log("Home component loading...");
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 1000)); 
+        console.log("Finished loading in Home");
+        setLoading(false);  
+      } catch (error) {
+        console.error('Error loading data', error);
+        setLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center w-full h-screen">
+        <Loader/>
+       
+      </div>
+    );
+  }
+
   return (
     <LocationProvider>
       <WeatherProvider>
         <div className="font-poppins">
           <Navbar />
-          <div className="flex flex-col justify-center items-center w-full">
-            <div className="max-w-[1600px] w-full flex flex-col justify-center">
-              <div className="p-[20px] sm:p-8 flex flex-col lg:flex-row gap-[5px] sm:gap-[60px] justify-center">
-                <CountryDetails />
-                <WeatherDetails />
-              </div>
-              <div className="p-[20px] sm:p-8 flex flex-col lg:flex-row gap-[5px] sm:gap-[60px] justify-center">
-                <DailyForecast />
-                <HourlyForecast />
-              </div>
-            </div>
-          </div>
+        <Body/>
         </div>
       </WeatherProvider>
     </LocationProvider>
