@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CountryDetails from "./CountryDetails";
 import WeatherDetails from "./WeatherDetails";
 import DailyForecast from "./DailyForecast";
@@ -9,26 +9,35 @@ import Loader from "./Loader";
 function Body() {
   const { fetchWeather } = useWeather();
   const [loading, setLoading] = useState(true);
+  const hasFetched = useRef(false);   
+  const hasPageReloaded = useRef(false);  
 
   useEffect(() => {
-    // Check if the weather data has been fetched already using localStorage
-    const weatherFetched = localStorage.getItem("weatherFetched");
+    if (typeof window !== "undefined") {
+      console.log("Client-side rendering");
 
-    if (!weatherFetched) {
-      const fetchData = async () => {
-        await fetchWeather();
-        setLoading(false);
-        // Mark the data as fetched by setting a flag in localStorage
-        localStorage.setItem("weatherFetched", "true");
-      };
+       if (window.performance.navigation.type === 1) {
+        hasPageReloaded.current = true;  
+        sessionStorage.removeItem("weatherFetched"); 
+      }
 
-      fetchData();
-    } else {
-      // If the data has already been fetched, set loading to false immediately
-      setLoading(false);
+       const weatherFetched = sessionStorage.getItem("weatherFetched");
+      if (!hasFetched.current && (!weatherFetched || hasPageReloaded.current)) {
+        const fetchData = async () => {
+          await fetchWeather();
+          setLoading(false);
+           sessionStorage.setItem("weatherFetched", "true");
+          hasFetched.current = true; 
+        };
+
+        fetchData();
+      } else {
+        setLoading(false);  
+      }
     }
   }, [fetchWeather]);
 
+  // If loading, show loader
   if (loading) {
     return <Loader />;
   }
