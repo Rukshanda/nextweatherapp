@@ -4,8 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "16"        # Specify the Node.js version to use
-  NEXT_PUBLIC_WEATHERBIT_API_KEY=2fafaa51492b4abd95724fa30e156784	
-
+ 
 [[plugins]]
   package = "@netlify/plugin-nextjs"  # Ensure this plugin is used for Next.js
 
