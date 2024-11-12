@@ -11,16 +11,26 @@ function Body() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchWeather();
-      setLoading(false); 
-    };
+    // Check if the weather data has been fetched already using localStorage
+    const weatherFetched = localStorage.getItem("weatherFetched");
 
-    fetchData();
+    if (!weatherFetched) {
+      const fetchData = async () => {
+        await fetchWeather();
+        setLoading(false);
+        // Mark the data as fetched by setting a flag in localStorage
+        localStorage.setItem("weatherFetched", "true");
+      };
+
+      fetchData();
+    } else {
+      // If the data has already been fetched, set loading to false immediately
+      setLoading(false);
+    }
   }, [fetchWeather]);
 
   if (loading) {
-    return <Loader />; 
+    return <Loader />;
   }
 
   return (
