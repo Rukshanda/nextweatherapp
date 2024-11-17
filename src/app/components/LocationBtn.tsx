@@ -24,7 +24,7 @@ function LocationBtn() {
 
   return (
     <button
-      className="bg-slate-700 p-[12px] flex items-center rounded-[30px] justify-center w-[55px] h-[50px] mds:w-[250px] mds:h-[100%] shadow-custom-dark gap-[8px]"
+      className="bg-slate-700 p-[12px] flex items-center rounded-[30px] justify-center w-[55px] h-[50px] mds:w-[250px] mds:h-[100%] shadow-custom-dark gap-[8px] text-white"
       onClick={handleClick}
     >
       <span className="text-[1.8rem] mds:text-[1.4rem] lg:text-[1.6rem]">
