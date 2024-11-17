@@ -39,7 +39,7 @@ const Navbar: FC = () => {
           {/* Search button */}
           <div className="bg-gray-500 flex gap-3 items-center p-[10px] lg:p-3 w-full sm:w-[800px] rounded-full shadow-custom-dark">
             <span className="text-lg pl-3" onClick={handleFetchWeather}>
-              <FaSearch />
+              <FaSearch className="text-white" />
             </span>
             <input
               type="text"
